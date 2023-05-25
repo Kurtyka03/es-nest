@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "auth" ALTER COLUMN "jwt" DROP NOT NULL;
