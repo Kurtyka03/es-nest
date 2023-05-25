@@ -72,14 +72,24 @@ export class AuthService implements AuthInterface {
 
     async signOut(sub: string) {
         try {
-            const auth = await this.prisma.auth.update({
+
+            const isLogin = await this.prisma.auth.findUnique({
+                where: {
+                    uuid: sub
+                }, select: {
+                    statusLogin: true
+                }
+            })
+            if(!isLogin.statusLogin) throw new ForbiddenException('User Is Not Login')
+
+            await this.prisma.auth.update({
                 where: {
                     uuid: sub
                 }, data: {
                     statusLogin: false
                 }
             })
-            if(!auth.statusLogin) throw new ForbiddenException('User Is Not Login')
+
             return "Successfully Logged Out"
         } catch (e) {
             throw e

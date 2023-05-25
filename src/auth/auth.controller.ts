@@ -5,6 +5,7 @@ import { RegisterDto, SignInDto } from './dto';
 import { Token } from './types';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
+import { GetUserId } from 'src/common/decorator';
 
 @Controller('auth')
 export class AuthController implements AuthInterface {
@@ -25,8 +26,7 @@ export class AuthController implements AuthInterface {
     @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.OK)
     @Post('signout')
-    signOut(@Req() req: Request) {
-        const auth = req.user;
-        return this.authService.signOut(auth['sub'])
+    signOut(@GetUserId() authId: string) {
+        return this.authService.signOut(authId)
     }
 }
