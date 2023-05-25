@@ -41,7 +41,6 @@ export class AuthService implements AuthInterface {
 
     async signIn(dto: SignInDto): Promise<Token> {
         try {
-            console.log(dto)
             const auth = await this.prisma.auth.findUnique({
                 where: {
                     email: dto.email
@@ -50,7 +49,6 @@ export class AuthService implements AuthInterface {
                     jwt: true
                 }
             })
-            console.log(auth)
             if (!auth) throw new ForbiddenException('Access Denied')
 
             const passwordMatches = await bcrypt.compare(dto.password, auth.hash)
@@ -58,14 +56,34 @@ export class AuthService implements AuthInterface {
 
             const access_token = auth.jwt
 
+            await this.prisma.auth.update({
+                where: {
+                    email: dto.email
+                }, data: {
+                    statusLogin: true
+                }
+            })
+
             return { access_token }
         } catch (e) {
             throw e
         }
     }
 
-    async signOut(arg0: any) {
-        throw new Error('Method not implemented.');
+    async signOut(sub: string) {
+        try {
+            const auth = await this.prisma.auth.update({
+                where: {
+                    uuid: sub
+                }, data: {
+                    statusLogin: false
+                }
+            })
+            if(!auth.statusLogin) throw new ForbiddenException('User Is Not Login')
+            return "Successfully Logged Out"
+        } catch (e) {
+            throw e
+        }
     }
 
     hashData(data: string) {

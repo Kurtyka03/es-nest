@@ -1,8 +1,10 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthInterface } from 'src/interface';
 import { AuthService } from './auth.service';
 import { RegisterDto, SignInDto } from './dto';
 import { Token } from './types';
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController implements AuthInterface {
@@ -20,9 +22,11 @@ export class AuthController implements AuthInterface {
         return this.authService.signIn(dto)
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.OK)
-    @Post()
-    signOut(arg0: any) {
-        return this.authService.signOut(arg0)
+    @Post('signout')
+    signOut(@Req() req: Request) {
+        const auth = req.user;
+        return this.authService.signOut(auth['sub'])
     }
 }
