@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  es-nest:
+    image: postgres:15
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: 123
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
