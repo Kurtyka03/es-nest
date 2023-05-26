@@ -11,7 +11,6 @@ export class UserController implements UserInterface{
         private userService: UserService
     ){}
 
-    //dodanie emu Admin/User
     @Public()
     @HttpCode(HttpStatus.OK)
     @Get('users')
@@ -33,7 +32,7 @@ export class UserController implements UserInterface{
     
     @HttpCode(HttpStatus.CREATED)
     @Post('users')
-    create(@Body() dto: UserCreateDto, @GetUserId() userid: string){
+    create(@Body() dto: UserCreateDto, @GetUserId() userid: string): Promise<UserType>{
         return this.userService.create(dto, userid)
     }
 
