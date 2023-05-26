@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { RegisterDto, SignInDto } from './dto';
 import { Token } from './types';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
 import { GetUserId } from 'src/common/decorator';
 
 @Controller('auth')

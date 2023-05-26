@@ -19,10 +19,3 @@ export class RegisterDto {
     @IsNotEmpty()
     password: string;
 }
-
-//wylogowanie (zmianna zmiennej login z true na false)
-export class SignOutDto {
-    @IsString()
-    @IsNotEmpty()
-    uuid: string;
-}

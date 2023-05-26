@@ -11,13 +11,21 @@ datasource db {
 }
 
 model auth {
-  id        Int      @id @default(autoincrement())
+  uuid      String   @unique
   createAt  DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  uuid        String   @unique
   email       String   @unique
   hash        String   @unique
   jwt         String
   statusLogin Boolean?
+}
+
+model user {
+  uuid      String   @unique
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name    String
+  surname String
 }
