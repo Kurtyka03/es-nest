@@ -1,46 +1,52 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { UserInterface } from 'src/interface';
 import { UserCreateDto } from './dto';
-import { GetUserId } from 'src/common/decorator';
+import { GetUserId, Public } from 'src/common/decorator';
+import { UserService } from './user.service';
+import { UserType } from './types';
 
 @Controller('')
 export class UserController implements UserInterface{
-    constructor(){}
-    
+    constructor(
+        private userService: UserService
+    ){}
+
+    //dodanie emu Admin/User
+    @Public()
     @HttpCode(HttpStatus.OK)
     @Get('users')
     index(){
-        
+        return this.userService.index();
     }
 
     @HttpCode(HttpStatus.OK)
     @Get('/users/:id')
     show(@Param() id: string) {
+        return this.userService.show(id)
     }
     
-    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.OK)
     @Get('users/:id/edit')
-    edit(arg0: any) {
+    edit(@GetUserId() userId: string) {
+        return this.userService.edit(userId)
     }
     
-    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.CREATED)
     @Post('users')
     create(@Body() dto: UserCreateDto, @GetUserId() userid: string){
+        return this.userService.create(dto, userid)
     }
 
     
-    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.OK)
     @Put('/users')
     update(@Body() dto: UserCreateDto, @GetUserId() userId: string) {
+        return this.userService.update(dto, userId)
     }
     
-    @UseGuards(AuthGuard('jwt'))
     @HttpCode(HttpStatus.OK)
     @Delete('users')
     destroy(@GetUserId() userId: string) {
+        return this.userService.destroy(userId)
     }
 }

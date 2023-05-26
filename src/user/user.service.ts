@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserInterface } from 'src/interface';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UserCreateDto } from './dto';
 
 @Injectable()
 export class UserService implements UserInterface {
@@ -8,22 +9,27 @@ export class UserService implements UserInterface {
         private prisma: PrismaService
     ) { }
 
-    index() {
+    async index() {
         throw new Error('Method not implemented.');
     }
-    create(arg0: any, arg1: any) {
+
+    async create(dto: UserCreateDto, userId: string) {
+        
+    }
+
+    async show(userId: string) {
         throw new Error('Method not implemented.');
     }
-    show(arg0: any) {
+
+    async edit(userId: string) {
         throw new Error('Method not implemented.');
     }
-    edit(arg0: any) {
+
+    async update(dto: UserCreateDto, userId: string) {
         throw new Error('Method not implemented.');
     }
-    update(arg0: any, arg1: any) {
-        throw new Error('Method not implemented.');
-    }
-    destroy(arg0: any) {
+
+    async destroy(userId: string) {
         throw new Error('Method not implemented.');
     }
 }
