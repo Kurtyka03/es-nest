@@ -96,6 +96,10 @@ export class AuthService implements AuthInterface {
         }
     }
 
+    update(arg0: any, arg1: any) {
+        throw new Error('Method not implemented.');
+    }
+
     hashData(data: string) {
         return bcrypt.hash(data, 10)
     }

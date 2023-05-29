@@ -28,4 +28,19 @@ model user {
 
   name    String
   surname String
+
+  post post[]
+}
+
+model post {
+  uuid      String   @unique
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String
+  price       String
+
+  author  user   @relation(fields: [auhorId], references: [uuid])
+  auhorId String
 }
