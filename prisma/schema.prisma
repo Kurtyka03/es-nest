@@ -39,7 +39,7 @@ model post {
 
   title       String
   description String
-  price       String
+  price       Float
 
   author  user   @relation(fields: [auhorId], references: [uuid])
   auhorId String

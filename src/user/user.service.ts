@@ -12,7 +12,11 @@ export class UserService implements UserInterface {
     ) { }
 
     async index() {
-        const result = await this.prisma.user.findMany()
+        const result = await this.prisma.user.findMany({
+            include: {
+                post: true
+            }
+        })
         return result
     }
 

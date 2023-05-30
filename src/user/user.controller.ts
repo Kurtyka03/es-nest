@@ -25,7 +25,7 @@ export class UserController implements UserInterface{
     }
     
     @HttpCode(HttpStatus.OK)
-    @Get('users/:id/edit')
+    @Get('users/edit')
     edit(@GetUserId() userId: string) {
         return this.userService.edit(userId)
     }
