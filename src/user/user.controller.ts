@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UserInterface } from 'src/interface';
 import { UserCreateDto } from './dto';
-import { GetUserId, Public } from 'src/common/decorator';
+import { GetUserId, GetUserJWT, Public } from 'src/common/decorator';
 import { UserService } from './user.service';
 import { UserType } from './types';
 
@@ -39,8 +39,8 @@ export class UserController implements UserInterface{
     
     @HttpCode(HttpStatus.OK)
     @Put('/users')
-    update(@Body() dto: UserCreateDto, @GetUserId() userId: string) {
-        return this.userService.update(dto, userId)
+    update(@Body() dto: UserCreateDto, @GetUserJWT() userJWT: string) {
+        return this.userService.update(dto, userJWT)
     }
     
     @HttpCode(HttpStatus.OK)

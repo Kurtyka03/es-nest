@@ -71,11 +71,20 @@ export class UserService implements UserInterface {
         }
     }
 
-    async update(dto: UserCreateDto, userId: string) {
+    async update(dto: UserCreateDto, userJWT: string) {
         try {
+            const userData = await this.prisma.auth.findUnique({
+                where: {
+                    jwt: userJWT
+                }, select: {
+                    uuid: true
+                }
+            })
+            if (!userData) throw new ForbiddenException('User not exist')
+
             const updateUser = await this.prisma.user.update({
                 where: {
-                    uuid: userId
+                    uuid: userData.uuid
                 }, data: {
                     name: dto.name,
                     surname: dto.surname
