@@ -43,7 +43,7 @@ export class AuthService implements AuthInterface {
         try {
             const auth = await this.prisma.auth.findUnique({
                 where: {
-                    email: dto.email
+                    email: dto.email,
                 }, select: {
                     hash: true,
                     jwt: true
@@ -80,7 +80,7 @@ export class AuthService implements AuthInterface {
                     statusLogin: true
                 }
             })
-            if(!isLogin.statusLogin) throw new ForbiddenException('User Is Not Login')
+            if (!isLogin.statusLogin) throw new ForbiddenException('User Is Not Login')
 
             await this.prisma.auth.update({
                 where: {
@@ -96,8 +96,44 @@ export class AuthService implements AuthInterface {
         }
     }
 
-    update(arg0: any, arg1: any) {
-        throw new Error('Method not implemented.');
+    async update(userId: string, dto: RegisterDto, userJWT: string): Promise<Token> {
+        try {
+            const currentUser = await this.prisma.auth.findUnique({
+                where:{
+                    jwt: userJWT
+                }
+            })
+            if(!currentUser) throw new ForbiddenException('User not exist')
+            const hash = await this.hashData(dto.password)
+            const authUpdate = await this.prisma.auth.update({
+                where: {
+                    uuid: userId
+                }, data: {
+                    hash: hash,
+                    email: dto.email,
+                    updatedAt: new Date()
+                }, select: {
+                    uuid: true,
+                    hash: true,
+                    email: true
+                }
+            })
+
+            const token = await this.getToken(authUpdate.uuid, authUpdate.email, authUpdate.hash)
+            await this.prisma.auth.update({
+                where: {
+                    uuid: authUpdate.uuid
+                }, data: {
+                    jwt: token.access_token
+                }, select: {
+                    jwt: true
+                }
+            })
+
+            return token
+        } catch(e){
+            throw e
+        }
     }
 
     hashData(data: string) {

@@ -17,7 +17,7 @@ model auth {
 
   email       String   @unique
   hash        String   @unique
-  jwt         String
+  jwt         String   @unique
   statusLogin Boolean?
 }
 

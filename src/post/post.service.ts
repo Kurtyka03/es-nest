@@ -55,6 +55,9 @@ export class PostService implements PostInterface {
                     price: true
                 }
             })
+
+            if (!post) throw new ForbiddenException('Post not exist')
+
             return post
         } catch (e) {
             throw e

@@ -9,7 +9,7 @@ import { PostType } from './types';
 export class PostController implements PostInterface {
     constructor(private service: PostService) { }
 
-    @Get('posts/:number')
+    @Get('index/posts/:number')
     @HttpCode(HttpStatus.OK)
     index(@Param('number') skipPosts: string) {
         return this.service.index(skipPosts)
@@ -31,7 +31,7 @@ export class PostController implements PostInterface {
         return this.service.edit(userId, postId)
     }
 
-    @Put('/posts')
+    @Put('/posts/:id')
     update(@Body() dto: PostCreateDto, @Param('id') postId: string): Promise<PostType> {
         return this.service.update(dto, postId)
     }
