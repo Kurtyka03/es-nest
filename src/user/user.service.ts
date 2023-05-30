@@ -48,6 +48,8 @@ export class UserService implements UserInterface {
             const userShow = await this.prisma.user.findUnique({
                 where: {
                     uuid: userId
+                }, include: {
+                    post: true
                 }
             })
             return userShow
@@ -88,6 +90,11 @@ export class UserService implements UserInterface {
 
     async destroy(userId: string) {
         try {
+            const postDelete = await this.prisma.post.deleteMany({
+                where: {
+                    auhorId: userId
+                }
+            })
             const userDelete = await this.prisma.user.delete({
                 where: {
                     uuid: userId
@@ -100,13 +107,14 @@ export class UserService implements UserInterface {
             })
 
             return {
+                postDelete,
                 userDelete,
                 authDelete
             }
         } catch (e) {
             if (e instanceof Prisma.PrismaClientKnownRequestError){
                 if (e.code === "P2025") {
-                    throw new ForbiddenException('User Already deleted')
+                    throw new ForbiddenException(`User not found`)
                 }
             }
         }
