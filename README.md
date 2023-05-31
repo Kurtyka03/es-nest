@@ -20,6 +20,8 @@ To create post you need pass: title(string), description(string) and price (floa
 
 ```bash
 $ npm install
+
+$ docker-compose up (to start docker container)
 ```
 
 ## Running the app
